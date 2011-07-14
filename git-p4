@@ -2016,7 +2016,10 @@ class P4Sync(Command):
                 if self.verbose:
                     print "Getting p4 changes for %s...%s" % (', '.join(self.depotPaths),
                                                               self.changeRange)
-                changes = self.p4.p4ChangesForPaths(self.depotPaths, self.changeRange)
+                if self.useClientSpec:
+                    changes = self.p4.p4ChangesForPaths([ "//" + os.environ["P4CLIENT"] ], self.changeRange)
+                else:
+                    changes = self.p4.p4ChangesForPaths(self.depotPaths, self.changeRange)
                 if self.verbose:
                     print "Found %i changes" % len(changes)
                 if len(self.maxChanges) > 0:

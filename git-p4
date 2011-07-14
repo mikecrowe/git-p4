@@ -1700,7 +1700,7 @@ class P4Sync(Command):
     def importChanges(self, changes, restartImport = False):
         cnt = 0
         for change in changes:
-            description = self.p4.p4Cmd("describe %s" % change)
+            description = self.p4.p4Cmd("describe -s %s" % change)
             self.updateOptionDict(description)
 
             cnt = cnt + 1

@@ -1780,10 +1780,15 @@ class P4Sync(Command):
         newestRevision = 0
 
         fileCnt = 0
-        for info in self.p4.p4CmdList("files "
-                              +  ' '.join(["%s...%s"
-                                           % (p, revision)
-                                           for p in self.depotPaths])):
+
+        if self.useClientSpec:
+            cmd = "files //" + os.environ["P4CLIENT"] + "/..."
+        else:
+            cmd = "files " + ' '.join(["%s...%s"
+                                       % (p, revision)
+                                       for p in self.depotPaths])
+
+        for info in self.p4.p4CmdList(cmd):
 
             if info['code'] == 'error':
                 sys.stderr.write("p4 returned an error: %s\n"

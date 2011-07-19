@@ -1370,6 +1370,7 @@ class P4Sync(Command):
 
         self.gitStream.write("data <<EOT\n")
         self.gitStream.write(details["desc"])
+        self.gitStream.write("\nP4#%s" % details["change"])
         self.gitStream.write("\nEOT\n\n")
         if len(parent) > 0:
             if self.verbose:

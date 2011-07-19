@@ -1383,6 +1383,10 @@ class P4Sync(Command):
                 continue
 
             relPath = self.stripRepoPath(f['path'], branchPrefixes)
+            (pathName, fileName) = os.path.split(relPath)
+            if fileName == ".p4ignore":
+                relPath = os.path.join(pathName, ".gitignore")
+
             if f['action'] in ('delete', 'purge', 'move/delete'):
                 self.gitStream.write("D %s\n" % relPath)
             else:
@@ -1421,6 +1425,9 @@ class P4Sync(Command):
 
             if includeFile and not excludeFile:
                 if f['action'] in ('delete', 'purge', 'move/delete'):
+                    (pathName, fileName) = os.path.split(relPath)
+                    if fileName == ".p4ignore":
+                        relPath = os.path.join(pathName, ".gitignore")
                     self.gitStream.write("D %s\n" % relPath)
 
         self.gitStream.write("\n")
